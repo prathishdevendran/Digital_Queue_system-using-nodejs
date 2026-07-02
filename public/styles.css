@@ -1,1 +1,709 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
 
+/* CSS Variables for design system */
+:root {
+  /* Common variables */
+  --font-title: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius-large: 28px;
+  --radius-medium: 18px;
+  --radius-small: 12px;
+  --radius-pill: 50px;
+  
+  --transition-smooth: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: all 0.2s ease;
+  --transition-elastic: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  --color-primary: #0364ff;
+  --color-primary-hover: #0052d4;
+  --color-primary-bg: rgba(3, 100, 255, 0.1);
+  
+  --color-high: #ff3b30;
+  --color-high-hover: #e02b20;
+  --color-high-bg: rgba(255, 59, 48, 0.1);
+  --color-high-border: rgba(255, 59, 48, 0.2);
+  
+  --color-medium: #ff9f0a;
+  --color-medium-hover: #e08a00;
+  --color-medium-bg: rgba(255, 159, 10, 0.1);
+  --color-medium-border: rgba(255, 159, 10, 0.2);
+  
+  --color-low: #30b0c7;
+  --color-low-hover: #2293a6;
+  --color-low-bg: rgba(48, 176, 199, 0.1);
+  --color-low-border: rgba(48, 176, 199, 0.2);
+
+  /* Light Theme Default Variables */
+  --bg-primary: #f4f6fa;
+  --bg-card: #ffffff;
+  --bg-input: #eceef2;
+  --text-primary: #121212;
+  --text-secondary: #636d7a;
+  --border-color: rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+  --shadow-float: 0 16px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.04);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --scrollbar-track: #f1f1f1;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-thumb-hover: #a8a8a8;
+  --card-glow: rgba(0, 0, 0, 0.01);
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --bg-primary: #0a0f1d;
+  --bg-card: #151c2c;
+  --bg-input: #1e2738;
+  --text-primary: #f5f6f8;
+  --text-secondary: #8e9cae;
+  --border-color: rgba(255, 255, 255, 0.06);
+  --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-float: 0 20px 50px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --glass-bg: rgba(21, 28, 44, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --scrollbar-track: #0e1424;
+  --scrollbar-thumb: #2c384e;
+  --scrollbar-thumb-hover: #3d4f6d;
+  
+  /* Vibrant overlays for Dark Mode */
+  --color-high-bg: rgba(255, 59, 48, 0.15);
+  --color-medium-bg: rgba(255, 159, 10, 0.15);
+  --color-low-bg: rgba(48, 176, 199, 0.15);
+  --card-glow: rgba(3, 100, 255, 0.04);
+}
+
+/* Global resets & Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  min-height: 100vh;
+  padding-bottom: 120px; /* Space for the bottom floating controls */
+  overflow-x: hidden;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Layout system */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Quick Settings Header Bar */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  animation: fadeIn 0.8s ease;
+}
+
+/* Theme Toggle Slider */
+.theme-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 58px;
+  height: 32px;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-input);
+  transition: 0.4s;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-color);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--color-primary);
+  transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Add custom icons to toggle slider */
+.slider::after {
+  content: '☀️';
+  position: absolute;
+  right: 8px;
+  top: 5px;
+  font-size: 14px;
+  transition: opacity 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #1e2738;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+  background-color: #f5f6f8;
+}
+
+input:checked + .slider::after {
+  content: '🌙';
+  left: 8px;
+  right: auto;
+}
+
+/* Navigation button (Samsung Pill Button style) */
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: var(--font-title);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-elastic);
+  cursor: pointer;
+}
+
+.pill-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: var(--shadow-float);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pill-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* One UI 8.5 Large Header Design */
+.oneui-header {
+  padding: 40px 0 30px 0;
+  text-align: left;
+  animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.oneui-header h1 {
+  font-family: var(--font-title);
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--color-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 8px;
+}
+
+.oneui-header p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Interactive Grid Dashboard */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease;
+}
+
+@media (min-width: 992px) {
+  .dashboard-grid {
+    grid-template-columns: 350px 1fr;
+  }
+}
+
+/* Samsung One UI Squircular Cards */
+.oneui-card {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-large);
+  padding: 30px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+.oneui-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: transparent;
+  transition: var(--transition-smooth);
+}
+
+.oneui-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-float);
+  border-color: rgba(3, 100, 255, 0.15);
+}
+
+.oneui-card.card-high::before { background: var(--color-high); }
+.oneui-card.card-medium::before { background: var(--color-medium); }
+.oneui-card.card-low::before { background: var(--color-low); }
+
+/* Card Title Styles */
+.card-title-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-title-area h2 {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Queue Limit Capacity Indicators (visual dots) */
+.capacity-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.capacity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--bg-input);
+  transition: var(--transition-smooth);
+}
+
+/* Active capacity states colored accordingly */
+.card-high .capacity-dot.active { background-color: var(--color-high); box-shadow: 0 0 8px var(--color-high); }
+.card-medium .capacity-dot.active { background-color: var(--color-medium); box-shadow: 0 0 8px var(--color-medium); }
+.card-low .capacity-dot.active { background-color: var(--color-low); box-shadow: 0 0 8px var(--color-low); }
+
+/* Capacity textual label */
+.capacity-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* Samsung One UI Input Design */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.oneui-input {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: var(--radius-medium);
+  background-color: var(--bg-input);
+  border: 1.5px solid transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.oneui-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.oneui-input:focus {
+  background-color: var(--bg-card);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--shadow-glow);
+}
+
+/* Select element customization */
+.oneui-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23636d7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  background-size: 16px;
+  padding-right: 48px;
+}
+
+/* Pill Form submit button */
+.oneui-btn-submit {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-medium);
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition-elastic);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(3, 100, 255, 0.2);
+}
+
+.oneui-btn-submit:hover {
+  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(3, 100, 255, 0.35);
+}
+
+.oneui-btn-submit:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Queue columns and list displays */
+.queues-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .queues-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.patient-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Empty State Card */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  text-align: center;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-medium);
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+.empty-state-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+/* Patient Card Item style (extremely detailed and premium squircular block) */
+.patient-item {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-medium);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition-elastic);
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.patient-item:hover {
+  transform: scale(1.02);
+  background-color: var(--bg-card);
+  box-shadow: var(--shadow-card);
+  border-color: rgba(3, 100, 255, 0.1);
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.patient-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.patient-details {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.patient-badge {
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+}
+
+.card-high .patient-badge { background-color: var(--color-high-bg); color: var(--color-high); }
+.card-medium .patient-badge { background-color: var(--color-medium-bg); color: var(--color-medium); }
+.card-low .patient-badge { background-color: var(--color-low-bg); color: var(--color-low); }
+
+/* One UI 8.5 Floating Bottom Control Panel (Signature Feature) */
+.oneui-floating-action-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: calc(100% - 48px);
+  max-width: 600px;
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-large);
+  padding: 16px;
+  box-shadow: var(--shadow-float);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Serve Button inside Floating Panel */
+.btn-serve-floating {
+  flex: 1;
+  padding: 16px 24px;
+  border-radius: var(--radius-medium);
+  background-color: #ff3b30;
+  color: #ffffff;
+  border: none;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition-elastic);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(255, 59, 48, 0.2);
+}
+
+.btn-serve-floating:hover:not(:disabled) {
+  background-color: #e02b20;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 59, 48, 0.4);
+}
+
+.btn-serve-floating:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-serve-floating:disabled {
+  background-color: var(--bg-input);
+  color: var(--text-secondary);
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Sub-panel status showing next priority queues */
+.floating-status-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-family: var(--font-title);
+}
+
+.floating-status-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.floating-status-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: var(--text-secondary);
+}
+
+.status-indicator-dot.active-high { background-color: var(--color-high); box-shadow: 0 0 6px var(--color-high); }
+.status-indicator-dot.active-med { background-color: var(--color-medium); box-shadow: 0 0 6px var(--color-medium); }
+.status-indicator-dot.active-low { background-color: var(--color-low); box-shadow: 0 0 6px var(--color-low); }
+
+/* Animation Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* History Page Custom Layout styling */
+.history-layout {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.history-card-item {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-medium);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-elastic);
+  animation: popIn 0.4s ease;
+}
+
+.history-card-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-float);
+}
+
+.history-patient-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-primary-bg);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.history-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-phone {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.history-meta {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.history-time-served {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
